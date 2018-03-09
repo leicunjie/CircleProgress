@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vjxRk3m3YYQ4uglexlrOxEVwGc2Nw6kF"></script>
+    </head>
+    <body>
+
+        <script>
+            window.onload = function () {
+                getGPSLocation();
+            };
+
+            function getGPSLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        getAddress(lat, lng);
+                    }, function (error) {
+                        console.log(error);
+                        var code = error.code;
+                        if (code == error.PERMISSION_DENIED) {
+                            alert('未允许定位');
+//                            Toast('未允许定位');
+                        }
+                        else if (code == error.POSITION_UNAVAILABLE) {
+                            alert('定位不可用');
+//                            Toast('定位不可用');
+                        }
+                        else if (code == error.TIMEOUT) {
+                            alert('定位超时');
+//                            Toast('定位超时');
+                        }
+                        else {
+                            alert('其他错误');
+                        }
+                    });
+                }
+            }
+            function getAddress(latitude, longitude) {
+                var myGeo = new BMap.Geocoder();
+//                var me = this;
+                myGeo.getLocation(new BMap.Point(longitude, latitude), function(result){
+                    if (result){
+                        var addressComponents = result.addressComponents;
+                        if (addressComponents) {
+                            var city = addressComponents.city;
+                            alert(city);
+                            if(city.indexOf('北京') != -1) {
+//                                me.city = "北京";
+//                                me.submitEnabled = true;
+                            }
+                            else {
+//                                me.submitEnabled = false;
+                            }
+                        }
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
